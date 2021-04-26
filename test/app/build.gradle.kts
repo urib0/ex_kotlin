@@ -12,6 +12,8 @@ plugins {
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+
+    kotlin("plugin.serialization") version "1.4.32"
 }
 
 repositories {
@@ -34,6 +36,8 @@ dependencies {
 
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
 }
 
 application {
