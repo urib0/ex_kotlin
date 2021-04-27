@@ -5,12 +5,9 @@ package ex_json
 import java.io.File
 import java.io.FileReader
 import java.io.FileNotFoundException
-import java.util.Scanner
-import java.nio.file.*
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.json.JSONObject
+import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.result.Result
 
 class App {
     val greeting: String
@@ -18,17 +15,6 @@ class App {
             return "Hello World!"
         }
 }
-/* 
-fun getText(): String{
-    val file = File("./sample.json")
-    val scan = Scanner(file)
-//    var i = scan.nextLine()
-//    i = scan.next()
-    print(scan.nextLine())
-    print(scan.next())
-    return "0"
-}
-*/
 
 fun getText(): String{
     var str: String = ""
@@ -48,13 +34,15 @@ fun getText(): String{
 }
 
 fun main() {
-    println(App().greeting)
+//    println(App().greeting)
 
     val txt = getText()
-    println(txt)
-    println(txt.javaClass)
     val json: JSONObject = JSONObject(txt)
-    println(json)
-    println(json.javaClass)
-    println("key1 is :" + json.getString("key1"))
+
+    val url = json.getString("domain")
+
+    val triple = url.httpGet().response()
+    // レスポンスボディを表示
+    println(String(triple.second.data))
+    println(triple.second.toString())
 }
