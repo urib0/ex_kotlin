@@ -10,6 +10,7 @@ import java.nio.file.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.json.JSONObject
 
 class App {
     val greeting: String
@@ -48,5 +49,12 @@ fun getText(): String{
 
 fun main() {
     println(App().greeting)
-    println(getText())
+
+    val txt = getText()
+    println(txt)
+    println(txt.javaClass)
+    val json: JSONObject = JSONObject(txt)
+    println(json)
+    println(json.javaClass)
+    println("key1 is :" + json.getString("key1"))
 }
