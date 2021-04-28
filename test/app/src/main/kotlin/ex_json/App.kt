@@ -5,8 +5,10 @@ package ex_json
 import java.io.File
 import java.io.FileReader
 import java.io.FileNotFoundException
+import java.net.URLDecoder
 import org.json.JSONObject
 import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 
 class App {
@@ -31,7 +33,9 @@ fun getText(): String{
         print(e)
     }
     return str
+
 }
+
 
 fun main() {
 //    println(App().greeting)
@@ -39,10 +43,30 @@ fun main() {
     val txt = getText()
     val json: JSONObject = JSONObject(txt)
 
-    val url = json.getString("domain")
+    val domain = json.getString("domain")
+    println("to URL:" + domain + "\n")
 
-    val triple = url.httpGet().response()
-    // レスポンスボディを表示
-    println(String(triple.second.data))
-    println(triple.second.toString())
+    val triple = domain.httpGet().response()
+    //    println(String(triple.second.data))
+//    val str = triple.second.toString().split("\n")[0].split(" ")[2]
+    val str = triple.second.toString().split("\n")[0].split(" ")[2]
+    val str2 = URLDecoder.decode(str, "UTF-8").split("passport=")[1]
+    val str3 = JSONObject(str2)
+    val deviceId = str3.getString("deviceId")
+    val token = str3.getString("token")
+    println(str3)
+    println("name:" + str3.getString("name"))
+    println("type:" + str3.getString("type"))
+    println("rtmpURL:" + str3.getString("rtmpUrl"))
+    println("deviceID:" + deviceId)
+    println("token:" + token)
+
+    val url = domain + "/api/devices/" + deviceId + "/beacon?token=" + token
+    val data = "{\"lat\": 35.70161,\"lng\": 139.75319,\"name\": \"Sample from API\"}"
+    println(data.javaClass)
+    println(data)
+
+    val tmp = url.httpPost().body(data).response()
+    println(tmp)
+
 }
